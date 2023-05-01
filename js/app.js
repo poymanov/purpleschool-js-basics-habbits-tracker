@@ -2,6 +2,7 @@
 
 let habbits = [];
 const HABBIT_KEY = 'HABBIT_KEY';
+let currentHabbitId;
 
 /* Page */
 const page = {
@@ -62,15 +63,14 @@ function rerenderMenu(activeHabbit) {
 	}
 }
 
-function rerenderHeader(activeHabbit)
-{
+function rerenderHeader(activeHabbit) {
 	page.header.h1.innerText = activeHabbit.name;
 
 	const percentValue = activeHabbit.days.length / activeHabbit.target;
 
 	const percent = percentValue > 1
-	? 100 
-	: (percentValue * 100).toFixed(0);
+		? 100
+		: (percentValue * 100).toFixed(0);
 
 	page.header.progressPercent.innerText = `${percent}%`;
 
@@ -101,12 +101,44 @@ function rerenderContent(activeHabbit) {
 	page.content.habbitFormNextDay.innerText = `День ${nextDay}`;
 }
 
+function addDays(event) {
+	event.preventDefault();
+	const form = event.target;
+
+	const formData = new FormData(form);
+	const comment = formData.get('comment');
+
+	form['comment'].classList.remove('error');
+
+	if (!comment) {
+		form['comment'].classList.add('error');
+	}
+
+	habbits = habbits.map(habbit => {
+		if (habbit.id !== currentHabbitId) {
+			return habbit;
+		}
+
+		return {
+			...habbit,
+			days: habbit.days.concat([{ comment }])
+		};
+	});
+
+	form['comment'].value = '';
+	
+	rerender(currentHabbitId);
+	saveData();
+}
+
 function rerender(activeHabbitId) {
 	const activeHabbit = habbits.find(habbit => habbit.id === activeHabbitId);
 
 	if (!activeHabbit) {
 		return;
 	}
+
+	currentHabbitId = activeHabbit.id;
 
 	rerenderMenu(activeHabbit);
 	rerenderHeader(activeHabbit);

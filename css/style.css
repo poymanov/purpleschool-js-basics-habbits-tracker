@@ -209,6 +209,10 @@ input::placeholder {
 	color: #8899A8;
 }
 
+input.error {
+	border: 1px solid red;
+}
+
 .button {
 	background-color: #EDECFE;
 	border-radius: 9px;
