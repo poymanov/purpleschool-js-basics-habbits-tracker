@@ -1,7 +1,8 @@
 'use strict';
 
-let habbits = [];
 const HABBIT_KEY = 'HABBIT_KEY';
+
+let habbits = [];
 let currentHabbitId;
 
 /* Page */
@@ -15,7 +16,8 @@ const page = {
 	content: {
 		habbitsList: document.querySelector('.habbit__list'),
 		habbitFormNextDay: document.querySelector('.habbit__day_form-next-day')
-	}
+	},
+	modalCover: document.querySelector('.cover')
 };
 
 /* Utils */
@@ -159,6 +161,10 @@ function rerender(activeHabbitId) {
 	rerenderMenu(activeHabbit);
 	rerenderHeader(activeHabbit);
 	rerenderContent(activeHabbit);
+}
+
+function toggleCreateModal() {
+	page.modalCover.classList.toggle('cover_hidden');
 }
 
 (() => {

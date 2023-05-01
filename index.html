@@ -17,7 +17,7 @@
 			<div>
 				<nav class="menu">
 					<div class="menu__list"></div>
-					<button class="menu__add">
+					<button class="menu__add" onclick="toggleCreateModal()">
 						<img src="/img/add.svg" alt="Добавить привычку">
 					</button>
 				</nav>
@@ -68,7 +68,7 @@
 					<input type="number" name="target" placeholder="Цель" />
 					<button class="button" type="submit">Добавить</button>
 				</form>
-				<button class="popup__close">
+				<button class="popup__close" onclick="toggleCreateModal()">
 					<img src="./img/close.svg" alt="Закрыть попап" />
 				</button>
 			</div>
