@@ -110,13 +110,10 @@ function addDays(event) {
 	event.preventDefault();
 	const form = event.target;
 
-	const formData = new FormData(form);
-	const comment = formData.get('comment');
+	const formData = validateAndGetFormData(form, ['comment']);
 
-	form['comment'].classList.remove('error');
-
-	if (!comment) {
-		form['comment'].classList.add('error');
+	if (!formData) {
+		return;
 	}
 
 	habbits = habbits.map(habbit => {
@@ -126,11 +123,11 @@ function addDays(event) {
 
 		return {
 			...habbit,
-			days: habbit.days.concat([{ comment }])
+			days: habbit.days.concat([{ comment: formData.comment }])
 		};
 	});
 
-	form['comment'].value = '';
+	clearForm(form, ['comment']);
 
 	rerender(currentHabbitId);
 	saveData();
@@ -174,6 +171,60 @@ function setIcon(context, icon) {
 	page.modal.formIconInput.value = icon;
 	document.querySelector('.icon.icon_active').classList.remove('icon_active')
 	context.classList.add('icon_active');
+}
+
+function addHabbit(event) {
+	event.preventDefault();
+
+	const form = event.target;
+	const formData = validateAndGetFormData(form, ['name', 'icon', 'target']);
+	
+	const maxCurrentId = habbits.reduce((acc, habbit) => acc > habbit.id ? acc : habbit.id, 0);
+	const habbitId = maxCurrentId + 1;
+
+	habbits.push({
+		"id": habbitId,
+		"icon": formData.icon,
+		"name": formData.name,
+		"target": formData.target,
+		"days": []
+	});
+
+	rerender(habbitId);
+	saveData();
+	toggleCreateModal();
+	clearForm(form, ['name', 'target']);
+}
+
+function validateAndGetFormData(form, fields) {
+	const formData = new FormData(form);
+	const resultData = {};
+
+	for (const field of fields) {
+		form[field].classList.remove('error');
+		const fieldValue = formData.get(field);
+
+		if (!fieldValue) {
+			form[field].classList.add('error');
+			continue;
+		}
+
+		resultData[field] = fieldValue;
+	}
+
+	for (const field of fields) {
+		if (!resultData[field]) {
+			return;
+		}
+	}
+
+	return resultData;
+}
+
+function clearForm(form, fields) {
+	for (const field of fields) {
+		form[field].value = '';
+	}
 }
 
 (() => {
