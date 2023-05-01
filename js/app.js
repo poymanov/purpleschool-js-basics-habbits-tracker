@@ -17,7 +17,10 @@ const page = {
 		habbitsList: document.querySelector('.habbit__list'),
 		habbitFormNextDay: document.querySelector('.habbit__day_form-next-day')
 	},
-	modalCover: document.querySelector('.cover')
+	modal: {
+		cover: document.querySelector('.cover'),
+		formIconInput: document.querySelector('.popup__form input[name="icon"]')
+	}
 };
 
 /* Utils */
@@ -164,7 +167,13 @@ function rerender(activeHabbitId) {
 }
 
 function toggleCreateModal() {
-	page.modalCover.classList.toggle('cover_hidden');
+	page.modal.cover.classList.toggle('cover_hidden');
+}
+
+function setIcon(context, icon) {
+	page.modal.formIconInput.value = icon;
+	document.querySelector('.icon.icon_active').classList.remove('icon_active')
+	context.classList.add('icon_active');
 }
 
 (() => {
