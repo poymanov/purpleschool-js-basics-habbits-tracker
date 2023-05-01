@@ -82,13 +82,13 @@ function rerenderContent(activeHabbit) {
 
 	let currentDay = 0
 
-	activeHabbit.days.forEach((day) => {
+	activeHabbit.days.forEach((day, index) => {
 		currentDay++;
 		contentHtml += `
 			<div class="habbit">
 				<div class="habbit__day">День ${currentDay}</div>
 				<div class="habbit__comment">${day.comment}</div>
-				<button class="habbit__delete">
+				<button class="habbit__delete" onclick="deleteDay(${index})">
 					<img src="/img/delete.svg" alt="Удалить день ${currentDay}">
 				</button>						
 			</div>
@@ -126,7 +126,23 @@ function addDays(event) {
 	});
 
 	form['comment'].value = '';
-	
+
+	rerender(currentHabbitId);
+	saveData();
+}
+
+function deleteDay(dayIndex)
+{
+	habbits = habbits.map(habbit => {
+		if (habbit.id !== currentHabbitId) {
+			return habbit;
+		}
+
+		habbit.days.splice(dayIndex, 1);
+
+		return habbit;
+	});
+
 	rerender(currentHabbitId);
 	saveData();
 }
