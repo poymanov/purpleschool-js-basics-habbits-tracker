@@ -10,6 +10,10 @@ const page = {
 		h1: document.querySelector('.h1'),
 		progressPercent: document.querySelector('.progress__percent'),
 		progressCoverBar: document.querySelector('.progress__cover-bar')
+	},
+	content: {
+		habbitsList: document.querySelector('.habbit__list'),
+		habbitFormNextDay: document.querySelector('.habbit__day_form-next-day')
 	}
 };
 
@@ -31,10 +35,6 @@ function saveData() {
 /* Render */
 
 function rerenderMenu(activeHabbit) {
-	if (!activeHabbit) {
-		return;
-	}
-
 	for (const habbit of habbits) {
 		const existed = document.querySelector(`[menu-habbit-id="${habbit.id}"]`);
 
@@ -64,10 +64,6 @@ function rerenderMenu(activeHabbit) {
 
 function rerenderHeader(activeHabbit)
 {
-	if (!activeHabbit) {
-		return;
-	}
-
 	page.header.h1.innerText = activeHabbit.name;
 
 	const percentValue = activeHabbit.days.length / activeHabbit.target;
@@ -81,10 +77,40 @@ function rerenderHeader(activeHabbit)
 	page.header.progressCoverBar.setAttribute('style', `width: ${percent}%`);
 }
 
+function rerenderContent(activeHabbit) {
+	let contentHtml = '';
+
+	let currentDay = 0
+
+	activeHabbit.days.forEach((day) => {
+		currentDay++;
+		contentHtml += `
+			<div class="habbit">
+				<div class="habbit__day">День ${currentDay}</div>
+				<div class="habbit__comment">${day.comment}</div>
+				<button class="habbit__delete">
+					<img src="/img/delete.svg" alt="Удалить день ${currentDay}">
+				</button>						
+			</div>
+		`;
+	});
+
+	const nextDay = ++currentDay;
+
+	page.content.habbitsList.innerHTML = contentHtml;
+	page.content.habbitFormNextDay.innerText = `День ${nextDay}`;
+}
+
 function rerender(activeHabbitId) {
 	const activeHabbit = habbits.find(habbit => habbit.id === activeHabbitId);
+
+	if (!activeHabbit) {
+		return;
+	}
+
 	rerenderMenu(activeHabbit);
 	rerenderHeader(activeHabbit);
+	rerenderContent(activeHabbit);
 }
 
 (() => {
