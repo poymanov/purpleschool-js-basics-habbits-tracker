@@ -158,6 +158,8 @@ function rerender(activeHabbitId) {
 
 	currentHabbitId = activeHabbit.id;
 
+	document.location.replace(document.location.pathname + '#' + currentHabbitId);
+
 	rerenderMenu(activeHabbit);
 	rerenderHeader(activeHabbit);
 	rerenderContent(activeHabbit);
@@ -229,5 +231,13 @@ function clearForm(form, fields) {
 
 (() => {
 	loadData();
-	rerender(habbits[0].id);
+
+	const currentHabbitId = Number(document.location.hash.replace('#', ''));
+	const currentHabbit = habbits.find(habbit => habbit.id === currentHabbitId);
+
+	if (currentHabbit) {
+		rerender(currentHabbit.id);
+	} else {
+		rerender(habbits[0].id);
+	}
 })();
