@@ -232,6 +232,10 @@ function clearForm(form, fields) {
 (() => {
 	loadData();
 
+	if (habbits.length === 0) {
+		return;
+	}
+
 	const currentHabbitId = Number(document.location.hash.replace('#', ''));
 	const currentHabbit = habbits.find(habbit => habbit.id === currentHabbitId);
 
